@@ -1,0 +1,54 @@
+Cho một mảng S gồm 2×N ký tự, trong đó có N ký tự ‘[’ và N ký tự ‘]’. Xâu S được gọi là viết đúng nếu S có dạng S2[S1] trong đó S, S2 là các xâu viết đúng. Nhiệm vụ của bạn là tìm số các phép đổi chỗ ít nhất các ký tự kề nhau của xâu S viết sai để  S trở thành viết đúng. Ví dụ với xâu S =”[]][][” ta có số phép đổi chỗ kề nhau ít nhất là 2.
+
+Input:
+
+Dòng đầu tiên đưa vào số lượng bộ test T.
+Những dòng kế tiếp đưa vào các bộ test. Mỗi bộ test là một xâu S viết sai theo nguyên tắc kể trên.
+T, S thòa mãn ràng buộc: 1≤T≤100; 1≤length(S)≤100000.
+Output:
+
+Đưa kết quả trên một dòng.
+Ví dụ:
+
+Input
+
+Output
+
+2
+
+[]][][
+
+[][][]
+
+2
+0
+
+#include <iostream>
+using namespace std;
+
+int greedy(string s) {
+	int n = 0, d = 0, i = 0;
+	while(i < s.size()) {
+		if(s[i] == '[')
+			d++;
+		else d--;
+		if(d < 0) {
+			while(s[i] == s[i+1] && i < s.size())
+				i = i + 1;
+			swap(s[i], s[i+1]);
+			n = n + 1;
+			i = -1;
+			d = 0;
+		}
+		i++;
+	}
+	return n;
+}
+
+int main() {
+	int t; cin >> t;
+	for(int i = 0; i < t; i++) {	
+		string s; cin >> s;
+		cout << greedy(s) << endl;
+	}
+}
