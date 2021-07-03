@@ -1,0 +1,82 @@
+Vương quốc PTIT sử dụng bảng chữ cái gồm N chữ cái Latinh viết hoa. Quy tắc đặt tên của gia đình Hoàng gia  PTIT là chọn ra K chữ cái (không trùng nhau) và sắp xếp lại theo thứ tự từ điển.
+
+Hãy liệt kê tất cả các cái tên có thể có của gia đình Hoàng gia PTIT
+
+Input
+
+Dòng đầu ghi số bộ test T (không quá 10)
+Mỗi bộ test ghi 2 số N và K (3 < K < N < 16)
+Output
+
+Với mỗi bộ test, ghi ra tất cả các cái tên có thể được tạo ra, mỗi kết quả viết trên một dòng.
+Ví dụ
+
+Input
+
+Output
+
+1
+
+4 2
+
+AB
+
+AC
+
+AD
+
+BC
+
+BD
+
+CD
+
+#include<bits/stdc++.h>
+
+using namespace std;
+int a[100],n,k,stop=0;
+
+void Init(){
+    for(int i=1;i<=k;i++){
+        a[i]=i;
+    }
+}
+void Result(){
+    int x=64;
+    for(int i=1;i<=k;i++){
+        char c=(char)(x+a[i]);
+        cout<<c;
+    }
+    cout<<endl;
+}
+
+void Next_Combination(){
+    int x=k;
+    while(a[x]==n-k+x) x--;
+    if(x==0) stop=1;
+    else {
+        a[x]=a[x]+1;
+        for(int i=x+1;i<=k;i++){
+            a[i]=a[i-1]+1;
+        }
+    }
+}
+
+void Solve(){
+    stop=0;
+    while(stop==0){
+        Result();
+        Next_Combination();
+    }
+}
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        cin>>n>>k;
+        Init();
+        Solve();
+        cout<<endl;
+    }
+}
