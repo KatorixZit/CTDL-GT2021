@@ -1,0 +1,101 @@
+Khi chat chit vui vẻ, anh em chiến hữu thường hay gõ HAHA để thể hiện sự sảng khoái. Đôi khi cũng có thể gõ HAHAAAAA chẳng hạn cho thêm phần nhấn mạnh.
+
+Giả sử một xâu ký tự được coi là HAHA nếu thỏa mãn các điều kiện:
+
+Ký tự đầu tiên phải là chữ H, ký tự cuối cùng phải là chữ A
+Không có hai chữ H nào liền nhau
+Cho trước độ dài N, hãy liệt kê tất cả các xâu ký tự HAHA theo thứ tự từ điển.
+
+Input
+
+Dòng đầu ghi số bộ test T (không quá 10)
+Mỗi bộ test ghi độ dài N (2 <= N < 16)
+Output
+
+Với mỗi bộ test, ghi ra tất cả các xâu HAHA tìm được theo thứ tự từ điển, mỗi xâu viết trên một dòng.
+Ví dụ
+
+Input
+
+Output
+
+2
+
+2
+
+4
+
+HA
+
+HAAA
+
+HAHA
+
+#include<bits/stdc++.h>
+#define M 100
+using namespace std;
+int n,k,d=0, OK=true;
+vector<vector<int> > v;
+vector<int> x;
+
+void Init(){
+	cin>>n;
+    x.resize(n);
+    OK = true;
+    for (int i = 0; i<n; i++) x.at(i)=0;
+    v.clear();
+}
+
+ 
+void Update(){
+    v.push_back(x);
+   	d++;
+}
+void res(){
+    for(int i=v.size()-1;i>=0;i--){
+	    for(int j=0;j<v.at(i).size();j++){
+     		if(v.at(i).at(j)== 1)
+     			cout<<"A";
+     		else
+     			cout<<"H";
+     		}
+	     		cout<<endl;
+     	}
+    }
+bool Check(){
+	if (x[0]==0 && x[n-1]==1){
+		for (int i = 0; i<n-1; i++){
+			if (x[i]==0 && x[i+1]==0) return false;
+		}
+		return true;
+	} else return false;
+}
+void Next_Bits_String(void){
+    int i = n - 1;
+    while (i>=0 && x.at(i)){
+         i--;
+    }
+    if (i>=0) {
+		x.at(i) = 1;
+		for (int j = i+1; j<n; j++){
+			x.at(j)=0;
+		}
+	}
+    else OK = false;
+}
+
+int main(){
+	int t; cin>>t;
+	while(t--){
+		Init();
+   		while (OK){
+   			if (Check()){
+   			Update();
+   			
+		}
+		Next_Bits_String();	
+		}
+    	res();
+	}
+    return 0;
+}
