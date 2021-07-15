@@ -1,0 +1,53 @@
+Cho xâu ký tự str. Nhiệm vụ của bạn là tìm số phép chèn tối thiểu các ký tự vào str để str trở thành xâu đối xứng. Ví dụ: str =”ab” ta có số phép chèn tối thiểu là 1 để trở thành xâu đối xứng “aba” hoặc “bab”. Với xâu str=”aa” thì số phép chèn tối thiểu là 0. Với xâu str=”abcd” có số phép chèn tối thiểu là 3 để trở thành xâu “dcbabcd”
+
+Input:
+
+Dòng đầu tiên đưa vào số lượng bộ test T.
+Những dòng kế tiếp đưa vào các bộ test. Mỗi bộ test là một xâu ký tự được viết trên một dòng
+T, str thỏa mãn ràng buộc: 1≤T≤100;  1≤length(str)≤40.
+Output:
+
+Đưa ra kết quả mỗi test theo từng dòng.
+Ví dụ:
+
+ 
+
+ 
+
+Input
+
+Output
+
+3
+abcd
+aba
+geeks
+
+3
+0
+
+3
+
+#include<bits/stdc++.h>
+using namespace std;
+int find(char str[], int n){
+	int qhd[n][n],l,h,i;
+	memset(qhd,0,sizeof(qhd));
+	for (i=1; i<n; i++){
+		for (l=0, h=i; h<n; ++l, ++h){
+			if (str[l]==str[h]) qhd[l][h]=qhd[l+1][h-1]; else
+			qhd[l][h]=min(qhd[l][h-1],qhd[l+1][h])+1;
+		}
+	}
+	return qhd[0][n-1];
+}
+int main(){
+	int t;
+	cin>>t;
+	while(t--){
+		char s[43];
+		cin>>s;
+		int n=strlen(s);
+		cout<<find(s,n)<<endl;
+	}
+}
