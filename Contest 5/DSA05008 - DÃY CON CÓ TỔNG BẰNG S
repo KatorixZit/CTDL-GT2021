@@ -1,0 +1,42 @@
+Cho N  số nguyên dương tạo thành dãy A={A1, A2, ..., AN}. Tìm ra một dãy con của dãy A (không nhất thiết là các phần tử liên tiếp trong dãy) có tổng bằng S cho trước.
+
+Input: Dòng đầu ghi số bộ test T (T<10).  Mỗi bộ test có hai dòng, dòng đầu tiên ghi hai số nguyên dương N và S (0 < N ≤ 200) và S (0 < S ≤ 40000). Dòng tiếp theo lần lượt ghi N số hạng của dãy A là các số A1, A2, ..., AN (0 < Ai ≤ 200).
+
+Output:  Với mỗi bộ test, nếu bài toán vô nghiệm thì in ra “NO”, ngược lại in ra “YES”
+
+Ví dụ:
+
+Input
+
+Output
+
+2
+
+5 6
+1 2 4 3 5
+
+10 15
+
+2 2 2 2 2 2 2 2 2 2
+
+YES
+
+NO
+
+ #include <iostream>
+using namespace std;
+
+bool has(int *a, int n, int s) {
+	int x[s+1][n+1] = {};
+	for(int i = 1; i <= s; i++) {
+		for(int j = 1; j <= n; j++) {
+			if(i == a[j-1] || x[i][j-1] == i) x[i][j] = i;
+			else if(i < a[j-1]) x[i][j] = x[i][j-1];
+			else {
+				int t = i - a[j-1];
+				x[i][j] = x[t][j-1] + a[j-1];
+			}
+		}
+	}
+	return s == x[s][n];
+}
