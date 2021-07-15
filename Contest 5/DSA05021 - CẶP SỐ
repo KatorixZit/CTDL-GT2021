@@ -1,0 +1,62 @@
+Cho N cặp số, trong đó số thứ nhất bao giờ cũng nhỏ hơn số thứ 2. Ta nói, cặp số <c, d> được gọi là theo sau cặp số <a,b> nếu b<c. Nhiệm vụ của bạn là tìm số lớn nhất chuỗi các cặp thỏa mãn ràng buộc trên. Ví dụ với các cặp {<5, 24>, <39, 60>, <15, 28>, <27, 40>, <50, 90>} ta có kết quả là 3 tương ứng với chuỗi các cặp {<5,24>, <27, 40>, <50, 90>}.
+
+Input:
+
+Dòng đầu tiên đưa vào số lượng bộ test T.
+Những dòng kế tiếp đưa vào các bộ test. Mỗi bộ test gồm hai dòng: dòng đầu tiên đưa vào N là số cặp <a, b>; dòng tiếp theo đưa vào 2*N số là N cặp số <a, b>; các số được viết cách nhau một vài khoảng trống.
+T, N, a, b thỏa mãn ràng buộc: 1≤T≤100;  1≤N, a, b ≤100.
+Output:
+
+Đưa ra kết quả mỗi test theo từng dòng.
+Ví dụ:
+
+Input
+
+Output
+
+2
+5
+5  24 39 60 15 28 27 40 50 90
+2
+5 10 1 11 
+
+3
+1
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Pair{
+	int t;
+	int s;
+};
+
+bool Less(Pair x, Pair y) {
+	return x.t < y.t;
+}
+
+int solve(Pair *a, int n) {
+	int c[n] = {1};
+	int m = 0;
+	sort(a, a+n, Less); 			// phai sap xep thi moi dung 
+	for(int i = 1; i < n; i++) {	//(vd voi 1 2 5 24 3 5 dung la 2 khong sap xep thi ra 1
+		c[i] = 1;
+		for(int j = 0; j < i; j++)
+			if(a[i].t > a[j].s && c[i] < c[j] + 1)
+				c[i] = c[j] + 1;
+		if(c[i] > m)
+			m = c[i];
+	}
+	return m;
+}
+
+int main() {
+	int t; cin >> t;
+	for(int x = 0; x < t; x++) {
+		int n; cin >> n;
+		Pair *a = new Pair[n];
+		for(int i = 0; i < n; i++)
+			cin >> a[i].t >> a[i].s;
+		cout << solve(a, n) << endl;
+	}
+}
