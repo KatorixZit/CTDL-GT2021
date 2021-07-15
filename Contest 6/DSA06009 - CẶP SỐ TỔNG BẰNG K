@@ -1,0 +1,51 @@
+Cho mảng A[] gồm n phần tử và số k. Đếm tất cả các cặp phần tử của mảng có tổng bằng k. Ví dụ A[] = {1, 5, 3, 4, 2 }, k = 7 ta có kết quả là 2 cặp (3, 4), (5, 2).
+
+Input:
+
+Dòng đầu tiên đưa vào số lượng bộ test T.
+Những dòng kế tiếp đưa vào T bộ test. Mỗi bộ test gồm hai dòng: dòng đầu tiên đưa vào n là số phần tử của mảng A[] và k; dòng tiếp theo là n số A[i] của mảng A[]các số được viết cách nhau một vài khoảng trống.
+T, n, k, A[i] thỏa mãn ràng buộc: 1≤ T ≤100; 1≤ n ≤100; 0≤ k ≤100, 0≤ A[i] ≤103.
+Output:
+
+Đưa ra kết quả mỗi test theo từng dòng.
+Input:
+
+Output:
+
+2
+5 9 
+1 5 4 1 2
+3 2
+
+1 1 1
+
+1
+3
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int countPair(int na, int k, int *a) {
+	sort(a, a+na); int count = 0;
+	for(int i = na-1; i > 0; i--) {
+		int t = k - a[i];
+		for(int j = i-1; j >= 0 && a[j] >= t; j--)
+			if(t == a[j]) count = count + 1;
+	}
+	return count;
+}
+
+int main() {
+	int t; cin >> t;
+	for(int x = 0; x < t; x++) {
+		int n, k; cin >> n >> k;
+		int a[n], na = 0;
+		for(int i = 0; i < n; i++) {
+			int t; cin >> t;
+			if(t <= k) {
+				a[na++] = t;
+			}
+		}
+		cout << countPair(na, k, a) << endl;
+	}
+}
