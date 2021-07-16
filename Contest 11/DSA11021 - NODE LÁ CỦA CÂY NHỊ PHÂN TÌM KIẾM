@@ -1,0 +1,93 @@
+
+Cho dãy số gồm N số là phép duyệt theo thứ tự trước (Preorder) của một cây nhị phân tìm kiếm. Hãy in ra tất cả các node lá của cây ?
+
+Ví dụ với dãy A[] = {30, 20, 15, 25, 23, 28, 40, 35, 33, 38, 45} là phép duyệt cây theo thứ tự trước sẽ cho ta kết quả: 15, 23, 28, 33, 38, 45.                                           
+
+    Input:
+
+Dòng đầu tiên đưa vào số lượng bộ test T (T≤100).
+Những dòng kế tiếp đưa vào T bộ test. Mỗi bộ test gồm 2 dòng: dòng thứ nhất là số tự nhiên N (N≤1000). Dòng tiếp theo là N số là phép duyệt theo thứ tự trước của cây BST.
+   Output:
+
+Đưa ra kết quả mỗi test theo từng dòng.
+   Ví dụ:
+
+Input
+
+Output
+
+2
+
+6
+
+10 5 1 7 40 50
+
+11
+
+30 20 15 25 23 28 40 35 33 38 45
+
+1 7 50
+
+15 23 28 33 38 45
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+vector<int> vt;
+struct node{
+	int data;
+	node* l;
+	node* r;
+	node(int x){
+		data=x;
+		l=NULL;
+		r=NULL;
+	}
+};
+
+typedef node Node;
+void themNode(Node* &t,int x){
+	if(t==NULL){
+		t=new Node(x);
+	}
+	
+	else{
+		if(x < t->data) themNode(t->l,x);
+		if(x > t->data) themNode(t->r,x);
+	}
+}
+
+void check(Node* &t){
+	if(t==NULL) return;
+	
+	if(t->l == NULL && t->r==NULL) vt.push_back(t->data);
+	
+	check(t->l);
+	check(t->r);
+}
+
+int main(){
+	int t;
+	cin>>t;
+	while(t--){
+		int n;
+		cin>>n;
+		
+		Node* t=NULL;
+		int a;
+		for(int i=0;i<n;i++){
+			cin>>a;
+			themNode(t,a);
+		}
+		vt.clear();
+		check(t);
+		sort(vt.begin(),vt.end());
+		
+		for(int i=0;i<vt.size();i++){
+			cout<<vt[i]<<" ";
+		}
+		
+		cout<<endl;
+	}
+}
