@@ -1,0 +1,73 @@
+Cho dãy số a[] có n phần tử, đánh số từ 1 đến n. Hãy sắp xếp các phần tử ở vị trí lẻ theo thứ tự tăng dần, các phần tử ở vị trí chẵn theo thứ tự giảm dần.
+
+Input
+
+Dòng đầu tiên ghi số n, không quá 105
+
+Dòng thứ 2 ghi n số của dãy a[] (a ≤ a[i] ≤ 109)
+
+Output
+
+Ghi ra dãy số kết quả trên một dòng
+
+Ví dụ
+
+Input
+
+Output
+
+4
+
+1 2 3 4
+
+1 4 3 2
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+void Solve(int a[], int n)
+{
+    vector<int> even;
+    vector<int> odd;
+
+    for (int i = 0; i < n; i++) {
+        if (!(i % 2))
+            even.push_back(a[i]);
+        else
+            odd.push_back(a[i]);
+    }
+ 
+    sort(even.begin(), even.end());
+    sort(odd.begin(), odd.end(), greater<int>());
+    int size=0;
+ 	if (even.size()>=odd.size()) {
+ 		size = odd.size();
+ 		
+ 		for (int i = 0; i<size; i++){
+ 			cout<<even[i]<<" "<<odd[i]<<" ";
+		}
+		for (int i = size; i<even.size(); i++){
+			cout<<even[i]<<" ";
+		}
+	} else {
+		size=even.size();
+		for (int i = 0; i<size; i++){
+			cout<<even[i]<<" "<<odd[i]<<" ";
+		}
+		for (int i = size; i<even.size(); i++){
+			cout<<odd[i]<<" ";
+		}
+	}
+	
+    
+}
+
+int main(){
+	int n; cin>>n;
+	int a[n];
+	for (int i = 0; i<n; i++){
+		cin>>a[i];
+	}
+	Solve(a,n);
+	
+}
