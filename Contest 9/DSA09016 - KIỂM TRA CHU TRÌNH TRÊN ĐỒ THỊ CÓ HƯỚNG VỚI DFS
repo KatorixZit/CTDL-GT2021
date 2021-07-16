@@ -1,0 +1,78 @@
+Cho đồ thị có hướng G=<V, E> được biểu diễn dưới dạng danh sách cạnh. Sử dụng thuật toán DFS, hãy kiểm tra xem đồ thị có tồn tại chu trình hay không?
+
+Input:
+
+Dòng đầu tiên đưa vào T là số lượng bộ test.
+Những dòng tiếp theo đưa vào các bộ test. Mỗi bộ test gồm 2 dòng: dòng đầu tiên đưa vào hai số |V|, |E| tương ứng với số đỉnh,  số cạnh của đồ thị; Dòng tiếp theo đưa vào các bộ đôi uÎV, vÎV tương ứng với một cạnh của đồ thị.
+T, |V|, |E| thỏa mãn ràng buộc: 1≤T≤100; 1≤|V|≤103; 1≤|E|≤|V|(|V|-1)/2;
+Output:
+
+Đưa ra YES hoặc “NO” kết quả test theo từng dòng tương ứng với đồ thị tồn tại hoặc không tồn tại chu trình.
+     Ví dụ:
+
+Input:
+
+Output:
+
+1
+
+6 9  
+
+1 2 2 4 3 1 3 2 3 5 4 3 5 4 5 6 6 4
+
+YES
+
+#include<bits/stdc++.h>
+using namespace std;
+vector<int> ke[1005];
+bool ok[1005];
+int a,b;
+bool BFS(int u){
+	queue<int> q;
+	q.push(u);
+	while (q.size()>0){
+		int top = q.front(); q.pop();
+		ok[u]=true;
+		for (int i = 0; i<ke[top].size(); i++){
+			if (!ok[ke[top][i]]){
+				ok[ke[top][i]]=true;
+				q.push(ke[top][i]);
+			}
+			else if (ke[top][i]==u) return true;
+		}
+	}
+	return false;
+}
+
+void solve(){
+	for (int i = 1; i<=a; i++){
+		memset(ok,false,sizeof(ok));
+		if (BFS(i)){
+			cout<<"YES"<<endl;
+			return;
+		}
+	}
+	cout<<"NO"<<endl;
+}
+
+
+int main(){
+	int t;
+	cin>>t;
+	while (t--){
+		for (int i = 0; i<1005; i++){
+			ke[i].clear();
+		}
+		memset(ok,false,sizeof(ok));
+		
+		cin>>a>>b;
+		for (int i = 0; i<b; i++){
+			int u, v;
+			cin>>u>>v;
+			ke[u].push_back(v);
+			//ke[v].push_back(u);
+		}
+		solve();
+	}
+	return 0;
+}
