@@ -1,0 +1,83 @@
+Cho một bản đồ kích thước N x M được mô tả bằng ma trận A[][].A[i][j] = 1 có nghĩa vị trí (i, j) là nổi trên biển. 2 vị trí (i, j) và (x, y) được coi là liền nhau nếu như nó có chung đỉnh hoặc chung cạnh. Một hòn đảo là một tập hợp các điểm (i, j) mà A[i][j] = 1 và có thể di chuyển giữa hai điểm bất kì trong đó.
+
+Nhiệm vụ của bạn là hãy đếm số lượng đảo xuất hiện trên bản đồ.
+
+Input: Dòng đầu tiên là số lượng bộ test T (T ≤ 20).
+
+Mỗi test bắt đầu bởi 2 số nguyên N và M (1 ≤ N, M ≤ 500).
+
+N dòng tiếp theo, mỗi dòng gồm M số nguyên A[i][j].
+
+Output:  Với mỗi test, in ra số lượng hòn đảo tìm được.
+
+Ví dụ:
+
+Input:
+
+Output
+
+1
+
+5 5
+
+1 1 0 0 0
+
+0 1 0 0 1
+
+1 0 0 1 1
+
+0 0 0 0 0
+
+1 0 1 0 1
+
+ 
+
+5
+
+#include<bits/stdc++.h>
+using namespace std;
+int dx[]={0,0,1,1,1,-1,-1,-1};
+int dy[]={-1,1,-1,0,1,-1,0,1};
+bool chuaxet[505][505];
+int a[505][505];
+void BFS(int u, int v){
+	queue<pair<int,int> > q;
+	pair<int,int> t,tmp;
+	tmp.first = u; tmp.second=v;
+	q.push(tmp);
+	chuaxet[u][v]=false;
+	while(q.size()>0){
+		t=q.front(); q.pop();
+		for (int i = 0; i<8; i++){
+			int x = t.first+dx[i];
+			int y = t.second+dy[i];
+			if (chuaxet[x][y] && a[x][y]==1){
+				chuaxet[x][y]=false;
+				tmp.first=x; tmp.second=y;
+				q.push(tmp);
+			}
+		}
+	}
+}
+int main(){
+	int t;
+	cin>>t;
+	while (t--){
+		memset(chuaxet,true,sizeof(chuaxet));
+		int d=0;
+		int n,m;
+		cin>>n>>m;
+		for (int i = 1; i<=n; i++) 
+			for (int j = 1; j<=m; j++)
+				cin>>a[i][j];
+		for (int i = 1; i<=n; i++){
+			for (int j = 1; j<=m; j++){
+				if (a[i][j]==1 && chuaxet[i][j]){
+					BFS(i,j);
+					d++;
+				}
+			}
+		}
+		cout<<d<<endl;
+	}
+}
