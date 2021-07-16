@@ -1,0 +1,80 @@
+Sau khi thi trượt môn Cấu trúc dữ liệu và giải thuật, một số sinh viên D19 CNTT - PTIT quyết định bỏ học, đầu tư thuê đất để trồng rau. Mảnh đất thuê là một hình chữ nhật N x M (1≤ N≤ 100; 1≤ M≤ 100) ô đất hình vuông. Nhưng chỉ sau đó vài ngày, trận lụt khủng khiếp đã diễn ra làm một số ô đất bị ngập. Mảnh đất bỗng biến thành các cái ao. Và sinh viên D19 lại dự định chuyển sang nuôi cá. Các bạn ấy muốn biết mảnh đất được chia thành bao nhiêu cái ao để có thể tính toán nuôi cá cho hợp lý. Hãy giúp các bạn ấy nhé. Chú ý: Ao là gồm một số ô đất bị ngập có chung đỉnh. Dễ nhận thấy là một ô đất có thể có tối đa 8 ô chung đỉnh.
+
+Dữ liệu vào: Dòng1: 2 số nguyên cách nhau bởi dấu cách: N và M. Dòng 2..N+1: M kí tự liên tiếp nhau mỗi dòng đại diện cho 1 hàng các ô đất.  Mỗi kí tự là 'W' hoặc '.' tương ứng với ô đất đã bị ngập và ô đất vẫn còn nguyên.
+
+Kết quả:  Một dòng chứa 1 số nguyên duy nhất là số ao tạo thành.
+
+Input
+
+Output
+
+10 12
+
+W........WW.
+
+.WWW.....WWW
+
+....WW...WW.
+
+.........WW.
+
+.........W..
+
+..W......W..
+
+.W.W.....WW.
+
+W.W.W.....W.
+
+.W.W......W.
+
+..W.......W.
+
+3
+
+#include<bits/stdc++.h>
+using namespace std;
+int dx[]={0,0,1,1,1,-1,-1,-1};
+int dy[]={-1,1,-1,0,1,-1,0,1};
+bool chuaxet[505][505];
+char a[505][505];
+void BFS(int u, int v){
+	queue<pair<int,int> > q;
+	pair<int,int> t,tmp;
+	tmp.first = u; tmp.second=v;
+	q.push(tmp);
+	chuaxet[u][v]=false;
+	while(q.size()>0){
+		t=q.front(); q.pop();
+		for (int i = 0; i<8; i++){
+			int x = t.first+dx[i];
+			int y = t.second+dy[i];
+			if (chuaxet[x][y] && a[x][y]=='W'){
+				chuaxet[x][y]=false;
+				tmp.first=x; tmp.second=y;
+				q.push(tmp);
+			}
+		}
+	}
+}
+int main(){
+	int t=1;
+	while (t--){
+		memset(chuaxet,true,sizeof(chuaxet));
+		int d=0;
+		int n,m;
+		cin>>n>>m;
+		for (int i = 1; i<=n; i++) 
+			for (int j = 1; j<=m; j++)
+				cin>>a[i][j];
+		for (int i = 1; i<=n; i++){
+			for (int j = 1; j<=m; j++){
+				if (a[i][j]=='W' && chuaxet[i][j]){
+					BFS(i,j);
+					d++;
+				}
+			}
+		}
+		cout<<d<<endl;
+	}
+}
