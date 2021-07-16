@@ -1,0 +1,92 @@
+Cho hai mảng là phép duyệt Inorder và Level-order, nhiệm vụ của bạn là xây dựng cây nhị phân và đưa ra kết quả phép duyệt Postorder. Level-order là phép duyệt theo từng mức của cây. Ví dụ như cây dưới đây ta có phép Inorder và Level-order như dưới đây:
+
+Inorder : 4  8  10  12 14 20 22
+
+Level order: 20  8  22  4  12  10  14
+
+https://media.geeksforgeeks.org/wp-content/cdn-uploads/BinaryTree4.png
+
+      Input:
+
+Dòng đầu tiên đưa vào số lượng test T.
+Những dòng tiếp theo đưa vào các bộ test. Mỗi bộ test gồm 3 dòng: dòng đầu tiên đưa vào số N là số lượng node; dòng tiếp theo đưa vào N số là phép duyệt Inorder; dòng cuối cùng đưa vào N số là phép duyệt Level-order; các số được viết cách nhau một vài khoảng trống.
+T, N, node thỏa mãn ràng buộc: 1≤T≤100; 1≤N≤103; 1≤A[i]≤104;
+Output:
+
+Đưa ra kết quả phép duyệt Postorder theo từng dòng.
+     Ví dụ:
+
+Input
+
+Output
+
+2
+3
+1 0 2 
+0 1 2 
+7
+3 1 4 0 5 2 6 
+0 1 2 3 4 5 6 
+
+1 2 0
+
+3 4 1 5 6 2 0
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct node {
+	int data;
+	node *left;
+	node *right;
+	node(int x) {
+		this->data = x;
+		left = right = NULL;
+	}
+};
+
+int search(int *a, int n, int x) {
+	for(int i = 0; i < n; i++)
+		if(x == a[i])
+			return i;
+	return -1;
+}
+
+void addNode(int n, int *ino, int *lev, node **root) {
+	(*root) = new node(lev[0]);
+	int key = search(ino, n, lev[0]);
+	int llev[key], rlev[n-1-key], x = 0, y = 0;
+	for(int i = 1; i < n; i++) {
+		if(search(ino, n, lev[i]) > key)
+			rlev[x++] = lev[i];
+		else llev[y++] = lev[i];
+	}
+	if(key > 0) addNode(key, ino, llev, &(*root)->left);
+	if(n-1-key > 0) addNode(n-1-key, ino+key+1, rlev, &(*root)->right);	
+}
+
+void postOrder(node *root) {
+	if(root != NULL) {	
+		if(root->left != NULL)
+			postOrder(root->left);
+		if(root->right!= NULL)
+			postOrder(root->right);
+		cout << root->data << ' ';
+	}
+}
+
+int main() {
+	int t; cin >> t;
+	for(int x = 0; x < t; x++) {
+		int n; cin >> n;
+		int ino[n], lev[n];
+		for(int i = 0; i < n; i++)
+			cin >> ino[i];
+		for(int i = 0; i < n; i++)
+			cin >> lev[i];
+		node *root = NULL;
+		addNode(n, ino, lev, &root);
+		postOrder(root);
+		cout << endl;
+	}
+}
