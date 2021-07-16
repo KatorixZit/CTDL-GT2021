@@ -1,0 +1,85 @@
+
+Cây biểu thức là một cây nhị phân trong đó mỗi node trung gian là một phép toán, mỗi node lá là một toán hạng. Ví dụ với biểu thức P = 3 + ((5+9)*2) sẽ được biểu diễn như cây dưới đây.
+
+Đối với cây biểu thức, duyệt theo thứ tự trước ta sẽ được biểu thức tiền tố, duyệt theo thứ tự sau ta sẽ được biểu thức hậu tố, duyệt theo thứ tự giữa ta được biểu thức trung tố. Chú ý, cây biểu thức luôn là cây nhị phân đầy (mỗi node trung gian đều có hai node con).
+
+Cho biểu thức hậu tố P, hãy sử dụng cây biểu thức để đưa ra biểu thức trung tố tương ứng với biểu thức P.
+
+Input:
+
+Dòng đầu tiên đưa vào số lượng bộ test T.
+Những dòng tiếp theo đưa vào các bộ test. Mỗi bộ test là một biểu thức hậu tố P.
+T, P thỏa mãn ràng buộc : 1≤T≤100; 1≤lengh(P)≤100.
+Output:
+
+Đưa ra biểu thức trung tố tương ứng với P.
+      Ví dụ:
+
+ 
+
+Input
+
+Output
+
+2
+ab+ef*g*-
+wlrb+-*
+
+a + b - e * f * g
+
+w * l - r + b
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct node{
+	char key;
+	node *left;
+	node *right;
+	node(char x) {
+		this->key = x;
+		left = right = NULL;
+	}
+};
+
+void inorder(node *root) {
+	if(root == NULL)
+		return;
+	inorder(root->left);
+	cout << root->key;
+	inorder(root->right);
+}
+
+bool isOperator(char c) {
+	if(c == '+' || c == '-' || c == '*' || c == '/' || c == '^')
+	   return true;
+	return false;
+}
+
+void tree(string s) {
+	stack<node *> stack;
+	int len = s.length();
+	for(int i = 0; i < len; i++) {
+		if(isOperator(s[i]) ) {
+			node *h = new node(s[i]);
+			node *r = stack.top(); stack.pop();
+			node *l = stack.top(); stack.pop();
+			h->left = l;
+			h->right = r;
+			stack.push(h);
+		} else {
+			stack.push(new node(s[i]));
+		}
+	}
+	inorder(stack.top());
+}
+
+int main() {
+	int t; cin >> t;
+	for(int i = 0; i < t; i++) {
+		string s ="";
+		while(s == "")
+			cin >> s;
+		tree(s); cout << endl;
+	}
+}
