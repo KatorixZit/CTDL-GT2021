@@ -7,6 +7,5 @@ Contest 5: Quy hoạch động
 Contest 6: Sắp xếp - tìm kiếm
 Contest 7: Ngăn xếp
 Contest 8: Hàng đợi
-Contest 9: Duyệt đồ thị
-Contest 10: Đồ thị nâng cao
+Contest 9+10: Duyệt đồ thị - Đồ thị nâng cao
 Contest 11: Cây nhị phân
