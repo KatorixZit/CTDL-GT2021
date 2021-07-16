@@ -1,0 +1,65 @@
+Hãy viết chương trình chuyển đổi biểu thức biểu diễn dưới dạng tiền tố về dạng hậu tố.
+
+Input:
+
+Dòng đầu tiên đưa vào số lượng bộ test T;
+Những dòng tiếp theo mỗi dòng đưa vào một bộ test. Mỗi bộ test là một biểu thức tiền tố exp.
+Output:
+
+Đưa ra kết quả mỗi test theo từng dòng.
+Ràng buộc:
+
+T, exp thỏa mãn ràng buộc: 1≤T≤100; 2≤length(exp)≤106.
+Ví dụ:
+
+Input
+
+Output
+
+2
+
+*+AB-CD
+
+*-A/BC-/AKL
+
+AB+CD-*
+
+ABC/-AK/L-*
+
+#include <bits/stdc++.h>
+using namespace std;
+
+bool isOperator(char c) {
+	switch(c) {
+		case '+':
+		case '-':
+		case '*':
+		case '/':
+		case '%':
+		case '^':
+			return true;
+	}
+	return false;
+}
+
+string convert(string str) {
+	stack<string> s;
+	int length = str.size();
+	for(int i = length-1; i >= 0; i--) {
+		if(isOperator(str[i])) {
+			string op1 = s.top(); s.pop();
+			string op2 = s.top(); s.pop();
+			string temp = op1 + op2 + str[i];
+			s.push(temp);
+		} else s.push(string (1, str[i]));
+	}
+	return s.top();
+}
+
+int main() {
+	int t; cin >> t;
+	for(int i = 0; i < t; i++) {
+		string str; cin >> str;
+		cout << convert(str) << endl;
+	}
+}
