@@ -1,0 +1,87 @@
+Đồ thị hai phía là một đồ thị đặc biệt, trong đó tập các đỉnh có thể được chia thành hai tập không giao nhau thỏa mãn điều kiện không có cạnh nối hai đỉnh bất kỳ thuộc cùng một tập. Cho đồ thị N đỉnh và M cạnh, bạn hãy kiểm tra đồ thị đã cho có phải là một đồ thị hai phía hay không?
+
+
+
+Input:
+
+Dòng đầu tiên là số lượng bộ test T (T ≤  20).
+Mỗi test bắt đầu bởi số nguyên N và M (1 ≤  N, M ≤  1000).
+M dòng tiếp theo, mỗi dòng gồm 2 số nguyên u, v cho biết có cạnh nối giữa đỉnh u và v.
+Output: 
+
+Với mỗi test, in ra “YES” nếu đồ thị đã cho là một đồ thị hai phía, in ra “NO” trong trường hợp ngược lại.
+Ví dụ:
+
+Input:
+
+Output
+
+2
+
+5 4
+
+1 5
+
+1 3
+
+2 3
+
+4 5
+
+3 3
+
+1 2
+
+1 3
+
+2 3
+
+YES
+
+NO
+
+#include<bits/stdc++.h>
+using namespace std;
+vector<int> ke[1005];
+int color[1005],n,m;
+bool chuaxet[1005], check;
+
+void DFS(int u, int t){
+	chuaxet[u]=false;
+	for (int i = 0; i<ke[u].size(); i++){
+		int v = ke[u][i];
+		if (chuaxet[v]){
+			if (color[v]==0) color[v]=3-color[u];
+			DFS(v,u);
+		} else if (color[u]==color[ke[u][i]]) check = false;
+	}
+}
+
+bool solve(){
+	check = true;
+	for (int i = 1; i<=n; i++){
+		memset(chuaxet,true,sizeof(chuaxet));
+		DFS(i,0);
+		if (!check) return false;
+	}
+	return true;
+}
+
+int main(){
+	int t;
+	cin>>t;
+	while(t--){
+		for (int i = 1; i<=1005; i++) ke[i].clear();
+		memset(color,0, sizeof(color));
+		memset(chuaxet,true,sizeof(chuaxet));
+		cin>>n>>m;
+		for (int i = 0; i<m; i++){
+			int u,v;
+			cin>>u>>v;
+			ke[u].push_back(v);
+			ke[v].push_back(u);
+		}
+		
+		if (solve()) cout<<"YES"<<endl; else cout<<"NO"<<endl;
+	}
+}
