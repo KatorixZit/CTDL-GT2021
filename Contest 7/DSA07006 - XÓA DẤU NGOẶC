@@ -1,0 +1,101 @@
+Cho biểu thức toán học đúng, bạn cần tìm tất cả các biểu thức đúng có thể bằng cách xóa bỏ các cặp dấu ngoặc tương ứng với nhau từ biểu thức ban đầu.
+
+Ví dụ: Cho biểu thức: (2+(2*2)+2) Các biểu thức tìm được:
+
+(2+2*2+2)
+
+2+(2*2)+2
+
+2+2*2+2
+
+Các biểu thức (2+2*2)+2 và 2+(2*2+2) không được chấp nhận vì không xóa đi các cặp dấu ngoặc tương ứng với nhau
+
+Input: Một dòng chứa biểu thức gồm các số nguyên không âm, các dấu +, -, *, / và dấu ngoặc đơn.
+
+Biểu thức không quá 200 kí tự, có chứa ít nhất 1 và không quá 10 cặp dấu ngoặc.
+
+Output: In ra tất các các biểu thức khác nhau thỏa mãn đầu bài theo thứ tự từ điển
+
+Ví dụ
+
+Input
+
+Output
+
+(1+(2*(3+4)))
+
+ 
+
+(1+(2*3+4))
+
+(1+2*(3+4))
+
+(1+2*3+4)
+
+1+(2*(3+4))
+
+1+(2*3+4)
+
+1+2*(3+4)
+
+1+2*3+4
+
+#include<bits/stdc++.h>
+using namespace std;
+int x[1000]={0},n,d=0;
+struct p{
+	int start;
+	int end;
+} a[15];
+
+string s; 
+vector<string>kq;
+
+void solve(){
+	stack<int> st; int n=s.length(),i;
+	for (i = 0; i<n; i++){
+		if (s[i]=='(') st.push(i);
+		if (s[i]==')'){
+			a[d].start=st.top(); st.pop();
+			a[d].end=i;
+			d++;
+		}
+	}
+}
+void del(){
+	int b[1005]={0}, c=0, i;
+	
+	for (i = 0; i<d; i++){
+		if (x[i]){
+			b[a[i].start]++;
+			b[a[i].end]++;
+			c=1;
+		}
+	}	
+	if (c!=0){
+		string tmp;
+		for (i=0; i<s.length();i++){
+			if (b[i]) continue;
+			tmp+=s[i];
+		}
+		kq.push_back(tmp);
+	}
+}
+
+void Try(int i){
+	for (int j=0; j<=1;j++){
+		x[i]=j;
+		if (i==d-1) del();
+		else Try(i+1);
+	}
+}
+int main(){
+	cin>>s;
+	solve();
+	Try(0);
+	sort(kq.begin(),kq.end());
+	for (int i = 0; i<kq.size();i++){
+		if(i!=0 && kq[i-1]!=kq[i]) cout<<kq[i]<<endl;
+		else if(i==0) cout<<kq[i]<<endl;
+	}
+}
