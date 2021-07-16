@@ -1,0 +1,128 @@
+Cho biểu thức trung tố S với các toán tử +, -, *, / và dấu ngoặc (). Các toán hạng là các số có giá trị không vượt quá 100. Hãy tính giá trị biểu thức S. Phép chia thực hiện với số nguyên, input đảm bảo số bị chia luôn khác 0, đáp số biểu thức có không quá 10 chữ số.
+
+Input:
+
+Dòng đầu tiên là số lượng bộ test (T ≤ 100).
+
+Mỗi dòng gồm một xâu S, không quá 100 kí tự. Các toán hạng là các số nguyên không âm.
+
+Output: 
+
+Với mỗi test, in ra đáp án tìm được.
+
+Ví dụ:
+
+Input
+
+Output
+
+4
+
+6*3+2-(6-4/2)
+
+100+99*22
+
+6*((4*3)+5)
+
+1-2
+
+16
+
+2278
+
+102
+
+-1
+
+#include <bits/stdc++.h>
+using namespace std;
+
+bool isOperator(char c) {
+	switch(c) {
+		case '+':
+		case '-':
+		case '*':
+		case '/':
+			return true;
+	}
+	return false;
+}
+
+long long calculate1(long long op1, long long op2, char c) {
+	switch(c) {
+		case '+':
+			return op1 + op2;
+		case '-':
+			return op1 - op2;
+		case '*':
+			return op1 * op2;
+		case '/':
+			return op1 / op2;
+	}
+}
+
+int sign(char c) {
+	switch(c) {
+		case '+':
+		case '-':
+			return 1;
+		case '*':
+		case '/':
+			return 2;
+	}
+	return -1;
+}
+
+long long calculate(string str) {
+	stack<long long> v;
+	stack<char> o;
+	int length = str.length();
+	for(int i = 0; i < length; i++) {
+		if(str[i] == ' ')
+			continue;
+		if(isOperator(str[i])) {
+			while(!o.empty() && sign(str[i]) <= sign(o.top())) {
+				long long op2 = v.top(); v.pop();
+				long long op1 = v.top(); v.pop();
+				char c = o.top(); o.pop();
+				v.push(calculate1(op1, op2, c));
+			}
+			o.push(str[i]);
+		} else if(str[i] == ')') {
+			while(o.top() != '(') {
+				long long op2 = v.top(); v.pop();
+				long long op1 = v.top(); v.pop();
+				char c = o.top(); o.pop();
+				v.push(calculate1(op1, op2, c));
+			}
+			o.pop();
+			
+		} else if(str[i] == '(') {
+			o.push('(');
+		}
+		else {
+			long long value = 0;
+			while(isdigit(str[i]) && i < length) {
+				value = value * 10 + str[i] - '0';
+				i = i + 1;
+			}
+			i = i - 1;
+			v.push(value);
+		}
+	}
+	while(!o.empty()) {
+		long long op2 = v.top(); v.pop();
+		long long op1 = v.top(); v.pop();
+		char c = o.top(); o.pop();
+		v.push(calculate1(op1, op2, c));
+	}
+	return v.top();	
+}
+
+int main() {
+	int t; cin >> t;
+	for(int i = 0; i < t; i++) {
+		string str; cin >> str;
+		cout << calculate(str) << endl;
+	}
+}
