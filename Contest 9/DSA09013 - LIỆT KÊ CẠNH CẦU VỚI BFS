@@ -1,0 +1,107 @@
+Cho đồ thị vô hướng liên thông G=<V, E> được biểu diễn dưới dạng danh sách cạnh. Sử dụng thuật toán BFS, hãy đưa ra tất cả các cạnh cầu của đồ thị?
+
+Input:
+
+Dòng đầu tiên đưa vào T là số lượng bộ test.
+Những dòng tiếp theo đưa vào các bộ test. Mỗi bộ test gồm |E| + 1 dòng: dòng đầu tiên đưa vào hai số |V|, |E| tương ứng với số đỉnh và số cạnh; |E| dòng tiếp theo đưa vào các bộ đôi uÎV, vÎV tương ứng với một cạnh của đồ thị.
+T, |V|, |E| thỏa mãn ràng buộc: 1≤T≤100; 1≤|V|≤103; 1≤|E|≤|V|(|V|-1)/2;
+Output:
+
+Đưa ra danh sách các cạch cầu của mỗi test theo từng dòng. In ra đáp án theo thứ tự từ điển, theo dạng “a b …” với a < b.
+       Ví dụ:
+
+Input:
+
+Output:
+
+1
+
+5 5
+
+1 2 
+
+1 3
+
+2 3
+
+2 5
+
+3 4
+
+2 5 3 4
+
+#include<bits/stdc++.h>
+using namespace std;
+vector<int> ke[1005];
+bool ok[1005];
+int truoc[1005];
+int a,b;
+vector<pair<int,int> > ans;
+void Reset(){
+	for (int i = 0; i<1005; i++){
+		ke[i].clear();
+	}
+	memset(ok,false,sizeof(ok));
+}
+void DFS(int u){
+	ok[u]=true;
+	for (int i = 0;i<ke[u].size();i++){
+		if (!ok[ke[u][i]]){
+			DFS(ke[u][i]);
+		}
+	}
+}
+int TPLT(){
+	int res = 0;
+	for (int i = 1; i<=a; i++){
+		if (!ok[i]){
+			res++;
+			DFS(i);
+		}
+	}
+	return res;
+}
+void Canhcau(int canh, int res, vector<pair<int,int> > tmp)
+{
+	for (int i = 0; i<b; i++){
+		if (i!=canh){
+			ke[tmp[i].first].push_back(tmp[i].second);
+			ke[tmp[i].second].push_back(tmp[i].first);
+		}
+	}
+	int dem = TPLT();
+	if (dem>res){
+		if (tmp[canh].first < tmp[canh].second)
+			ans.push_back({tmp[canh].first,tmp[canh].second});
+		else ans.push_back({tmp[canh].second,tmp[canh].first});
+	}
+}
+int main(){
+	int t;
+	cin>>t;
+	while(t--){
+		Reset();
+		ans.clear();
+		cin>>a>>b;
+		vector<pair<int,int> > tmp;
+		for (int i = 0; i<b; i++){
+			int u, v;
+			cin>>u>>v;
+			tmp.push_back({u,v});
+			ke[u].push_back(v);
+			ke[v].push_back(u);
+		}
+		int res = TPLT();
+		
+		for (int canh = 0; canh<b; canh++){
+			Reset();
+			Canhcau(canh,res,tmp);
+		}
+		sort(ans.begin(), ans.end());
+		for (int i = 0; i<ans.size(); i++){
+			cout<<ans[i].first<<" "<<ans[i].second<<" ";
+		}
+		cout<<endl;
+	}
+	return 0;
+}
