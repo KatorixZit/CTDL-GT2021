@@ -1,0 +1,69 @@
+Cho một ngăn xếp các số nguyên. Các thao tác gồm 3 lệnh: push, pop và show. Trong đó thao tác push kèm theo một giá trị cần thêm (không quá 1000). Hãy viết chương trình ghi ra kết quả của các lệnh show.
+
+Input: Gồm nhiều dòng, mỗi dòng chứa một lệnh push, pop hoặc show. Input đảm bảo số lượng phần tử trong stack khi nhiều nhất cũng không vượt quá 200.
+
+Output: Ghi ra màn hình các phần tử đang có trong stack theo thứ tự lưu trữ mỗi khi gặp lệnh show. Các số viết cách nhau đúng một khoảng trống. Nếu trong stack không còn gì thì in ra dòng “empty”
+
+Ví dụ:
+
+Input
+
+Output
+
+push 3
+
+push 5
+
+show
+
+push 7
+
+show
+
+pop
+
+pop
+
+show
+
+3 5
+
+3 5 7
+
+3
+
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+	string s;
+	int n;
+	stack<int> stack;
+	while (cin>>s){
+		if (s=="push")
+		{
+			cin>>n;
+			stack.push(n);
+		}
+		else if (s=="pop") stack.pop();
+		else if (s=="show"){
+			vector<int> x;
+			if (stack.size()==0)
+			{
+				cout<<"empty"<<endl;
+				continue;
+			}
+			while (stack.size()>0)
+			{
+				x.push_back(stack.top());
+				stack.pop();	
+			}
+			reverse(x.begin(),x.end());
+			for (int i = 0; i<x.size(); i++){
+				cout<<x[i]<<" ";
+				stack.push(x[i]);
+			}
+			cout<<endl;
+		}
+	}
+	return 0;
+}
