@@ -1,0 +1,77 @@
+
+Cho một mảng là phép duyệt level-order của cây nhị phân tìm kiếm. Nhiệm vụ của bạn là xây dựng lại cây nhị phân tìm kiếm bảo toàn được cấu trúc cây nhị phân ban đầu.
+
+     Input:
+
+Dòng đầu tiên đưa vào số lượng test T.
+Những dòng tiếp theo đưa vào các bộ test. Mỗi bộ test gồm dòng: dòng đầu tiên đưa vào số N là số lượng node của cây tìm kiếm; dòng tiếp theo đưa vào phép duyệt level-order của cây tìm kiếm; các số được viết cách nhau một vài khoảng trống.
+T, N, node thỏa mãn ràng buộc: 1≤T≤100; 1≤N≤103; 1≤node≤104;
+Output:
+
+Đưa ra kết quả mỗi test theo từng dòng là phép duyệt trước (preOrder) của cây tìm kiếm.
+      Ví dụ:
+
+Input
+
+Output
+
+2
+9
+7 4 12 3 6 8 1 5 10
+6
+1 3 4 6 7 8
+
+7 4 3 1 6 5 12 8 10
+1 3 4 6 7 8
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct node{
+	int data;
+	node* l;
+	node* r;
+	node(int x){
+		data=x;
+		l=NULL;
+		r=NULL;
+	}
+};
+
+typedef node Node;
+
+void themNode(Node* &t,int x){
+	if(t== NULL) t=new Node(x);
+	else{
+		if(x < t->data) themNode(t->l,x);
+		if(x > t->data) themNode(t->r,x);
+	}
+}
+
+void duyet(Node* &t){
+	if(t!=NULL){
+		cout<<t->data<<" ";
+		duyet(t->l);
+		duyet(t->r);
+	}	
+}
+
+int main(){
+	int t;
+	cin>>t;
+	while(t--){
+		int n,a;
+		cin>>n;
+		
+		Node* t=NULL;
+		
+		for(int i=0;i<n;i++){
+			cin>>a;
+			themNode(t,a);
+		}
+		duyet(t);
+		cout<<endl;
+		
+	}
+}
