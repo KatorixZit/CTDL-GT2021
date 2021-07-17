@@ -62,47 +62,51 @@ Output
 
 #include <bits/stdc++.h>
 using namespace std;
-
-
-int BFS(int s, int v, vector<int> *list, bool *visited) {
-	queue<int> queue; queue.push(s);
-	visited[s] = true;
+vector<int> ke[100005];
+bool ok[100005];
+int a,b;
+int BFS(int u) {
+	queue<int> q; q.push(u);
+	ok[u] = true;
 	int t = 1;
-	while(!queue.empty() ) {
-		s = queue.front(); queue.pop();
-		for(int i = 0; i < list[s].size(); i++) {
-			if(!visited[list[s][i]]) {
+	while(!q.empty() ) {
+		int top = q.front(); q.pop();
+		for(int i = 0; i < ke[top].size(); i++) {
+			if(!ok[ke[top][i]]) {
 				t = t + 1;
-				queue.push(list[s][i]);
-				visited[list[s][i]] = true;
+				q.push(ke[top][i]);
+				ok[ke[top][i]] = true;
 			}
 		}
 	}
 	return t;
 }
 
-int count(int v, vector<int> *list, bool *visited) {
-	int ma = 0;
-	for(int  i = 0; i < v; i++) {
-		if(!visited[i]) {
-			int t = BFS(i, v, list, visited);
-			if (t>ma) ma = t;
+int count() {
+	int max = 0;
+	for(int i = 1; i<=a ; i++) {
+		if(!ok[i]) {
+			int t = BFS(i);
+			if (t>max) max = t;
 		}
 	}
-	return ma;
+	return max;
 }
 
 int main() {
 	int t; cin >> t;
-	for(int x = 0; x < t; x++) {
-		int v, e; cin >> v >> e;
-		vector<int> list[v];
-		bool visited[v] = {};
-		for(int i = 0; i < e; i++) {
-			int begin, end; cin >> begin >> end;
-			list[begin-1].push_back(end-1);
-			list[end-1].push_back(begin-1);
+	while (t--){
+		for (int i = 0; i<100005; i++){
+			ke[i].clear();
 		}
-		cout << count(v, list, visited) << endl;
+		cin>>a>>b;
+		memset(ok,false, sizeof(ok));
+		for (int i = 0; i<b; i++){
+			int u, v;
+			cin>>u>>v;
+			ke[u].push_back(v);
+			ke[v].push_back(u);
+		}
+		cout<<count()<<endl;
 	}
 }
