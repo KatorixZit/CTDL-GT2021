@@ -43,7 +43,6 @@ YES
 using namespace std;
 vector<int> ke[1005];
 bool ok[1005];
-int truoc[1005];
 
 void BFS(int u, int v){
 	queue<int> q;
@@ -59,7 +58,6 @@ void BFS(int u, int v){
 		for (int i = 0; i<ke[top].size(); i++){
 			if (!ok[ke[top][i]])
 			{
-				truoc[ke[top][i]]=top;
 				ok[ke[top][i]]=true;
 				q.push(ke[top][i]);
 			}
