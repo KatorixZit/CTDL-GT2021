@@ -29,57 +29,32 @@ a + b - e * f * g
 
 w * l - r + b
 
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
+
 using namespace std;
 
-struct node{
-	char key;
-	node *left;
-	node *right;
-	node(char x) {
-		this->key = x;
-		left = right = NULL;
-	}
-};
-
-void inorder(node *root) {
-	if(root == NULL)
-		return;
-	inorder(root->left);
-	cout << root->key;
-	inorder(root->right);
-}
-
-bool isOperator(char c) {
-	if(c == '+' || c == '-' || c == '*' || c == '/' || c == '^')
-	   return true;
+bool checkoperator(char c){
+	if(c=='+' || c=='-' || c== '*' || c== '/') return true;
 	return false;
 }
 
-void tree(string s) {
-	stack<node *> stack;
-	int len = s.length();
-	for(int i = 0; i < len; i++) {
-		if(isOperator(s[i]) ) {
-			node *h = new node(s[i]);
-			node *r = stack.top(); stack.pop();
-			node *l = stack.top(); stack.pop();
-			h->left = l;
-			h->right = r;
-			stack.push(h);
-		} else {
-			stack.push(new node(s[i]));
+int main(){
+	int t;
+	cin>>t;
+	while(t--){
+		stack<string> st;
+		string s;
+		cin>>s;
+		for(int i=0;i<s.length();i++){
+			if(!checkoperator(s[i])) st.push(string(1,s[i]));
+			else{
+				string s1=st.top();	st.pop();
+				string s2=st.top();	st.pop();
+				string temp=s2+ s[i]+ s1;
+				st.push(temp);
+			}
 		}
-	}
-	inorder(stack.top());
-}
-
-int main() {
-	int t; cin >> t;
-	for(int i = 0; i < t; i++) {
-		string s ="";
-		while(s == "")
-			cin >> s;
-		tree(s); cout << endl;
+		string temp1=st.top();	st.pop();
+		cout<<temp1<<endl;
 	}
 }
