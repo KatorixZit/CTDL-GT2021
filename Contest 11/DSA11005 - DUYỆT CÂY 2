@@ -32,61 +32,75 @@ Output
 
 3 4 1 5 6 2 0
 
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-struct node {
+struct node{
 	int data;
-	node *left;
-	node *right;
-	node(int x) {
-		this->data = x;
-		left = right = NULL;
-	}
+	node* l;
+	node* r;
+	node(int x){
+        data = x;
+        l = NULL;
+        r = NULL;
+    }
 };
 
-int search(int *a, int n, int x) {
-	for(int i = 0; i < n; i++)
-		if(x == a[i])
-			return i;
-	return -1;
+typedef node NODE;
+
+NODE* taoTree(vector<int>& inoder, 
+            unordered_map<int,int>& levelorder,int start,int end){
+	if(start > end) return NULL;
+	
+	int index=start;
+	
+	for(int j=start+1;j<=end;j++){
+		if(levelorder[inoder[j]] < levelorder[inoder[index]] )	index=j;
+	}
+	
+	NODE* node=new NODE(inoder[index]);
+	
+	if(start==end) return node;
+	
+	node->l=taoTree(inoder,levelorder,start,index-1);
+	node->r=taoTree(inoder,levelorder,index+1,end);
+	
+	return node;
 }
 
-void addNode(int n, int *ino, int *lev, node **root) {
-	(*root) = new node(lev[0]);
-	int key = search(ino, n, lev[0]);
-	int llev[key], rlev[n-1-key], x = 0, y = 0;
-	for(int i = 1; i < n; i++) {
-		if(search(ino, n, lev[i]) > key)
-			rlev[x++] = lev[i];
-		else llev[y++] = lev[i];
+void postOrder(NODE* node){
+  	if (node != NULL) {  		
+		postOrder(node->l);				  		
+		postOrder(node->r);
+		cout<<node->data<<" ";
 	}
-	if(key > 0) addNode(key, ino, llev, &(*root)->left);
-	if(n-1-key > 0) addNode(n-1-key, ino+key+1, rlev, &(*root)->right);	
+    return;
 }
-
-void postOrder(node *root) {
-	if(root != NULL) {	
-		if(root->left != NULL)
-			postOrder(root->left);
-		if(root->right!= NULL)
-			postOrder(root->right);
-		cout << root->data << ' ';
-	}
-}
-
-int main() {
-	int t; cin >> t;
-	for(int x = 0; x < t; x++) {
-		int n; cin >> n;
-		int ino[n], lev[n];
-		for(int i = 0; i < n; i++)
-			cin >> ino[i];
-		for(int i = 0; i < n; i++)
-			cin >> lev[i];
-		node *root = NULL;
-		addNode(n, ino, lev, &root);
-		postOrder(root);
-		cout << endl;
-	}
+int main(){
+    int t;
+    cin>>t;
+    while (t--) {
+        int n;
+        cin>>n;
+        vector<int> inorder;
+        vector<int> levelorder;
+        int x1,x;
+        for (int i = 0 ; i < n; i++) {
+        	cin>>x;
+            inorder.push_back(x);
+        }
+        
+        for (int i = 0 ; i < n; i++) {
+            cin>>x1;
+            levelorder.push_back(x1);
+        }
+        
+        unordered_map<int,int> levelorderMap;
+	    for (int i=0; i < levelorder.size(); i++)
+	        levelorderMap[levelorder[i]] = i;
+        
+        NODE* t=taoTree(inorder,levelorderMap,0,n-1 );
+        postOrder(t);
+        cout<<endl;
+    }
 }
