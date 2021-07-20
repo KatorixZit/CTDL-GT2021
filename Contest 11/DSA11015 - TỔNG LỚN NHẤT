@@ -1,0 +1,110 @@
+Cho cây nhị phân có giá trị mỗi node là một số, nhiệm vụ của bạn là tìm tổng lớn nhất từ một node lá này sang một node lá khác? Ví dụ với cây dưới đây ta có tổng lớn nhất là 27.
+
+
+Input:
+
+Dòng đầu tiên đưa vào số lượng test T.
+Những dòng tiếp theo đưa vào các bộ test. Mỗi bộ test gồm 3 dòng: dòng đầu tiên đưa vào số N là số lượng cạnh của cây; dòng tiếp theo đưa vào N bộ ba (u, v, x), trong đó u là node cha, v là node con, x= R nếu v là con phải, x=L nếu v là con trái; u, v, x được viết cách nhau một vài khoảng trống.
+T, N, u, v, thỏa mãn ràng buộc: 1≤T≤100; 1≤N≤103; 1≤u, v≤104;
+Output:
+
+Đưa ra kết quả mỗi test theo từng dòng.
+      Ví dụ:
+
+Input
+
+Output
+
+1
+12
+-15 5 L -15 6 R 5 -8 L 5 1 R -8 2 L -8 -3 R 6 3 L 6 9 R 9 0 R 0 4 L 0 -1 R -1 10 L
+
+27
+
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct Node
+{
+    int data;
+    Node* left;
+    Node* right;
+    	Node(int data){
+	    this->data = data ;
+	    left = NULL;
+	    right = NULL;
+	}
+};
+
+void makeNode(Node* root, int n1, int n2, char c)
+{
+	if(c=='L')
+		root->left=new Node (n2);
+	else
+		root->right=new Node (n2);
+}
+void in(Node* root,int n1, int n2, char c )
+{
+	if(!root) return;
+	if(root->data==n1) makeNode(root,n1,n2,c);
+	else 
+	{
+		in(root->left,n1,n2,c);
+		in(root->right,n1,n2,c);
+	}
+}
+Node* readtree()
+{
+	int n;
+     scanf("%d",&n);
+     Node *r = NULL;
+		int u,v;char p;
+        	for(int i = 0; i < n; i ++)
+        	{
+        		cin>>(u)>>v>>p;
+        		if(!r)  r = new Node(u);
+        		in(r,u,v,p);
+			}
+	return r;
+}
+int maxs;
+int Util(Node *root)
+{
+    if(!root)  return 0;
+    
+    int l = Util(root->left);
+    int r = Util(root->right);
+    
+    if(!root->left && !root->right)
+        return root->data;
+    
+    if(root->left && root->right)
+        maxs = max(maxs, root->data+l+r);
+    
+    if(root->left && root->right)
+        return max(root->data+l, root->data+r);
+    else if(root->right)
+        return root->data + r;
+    else
+        return root->data + l;
+}
+
+int maxPathSum(Node* root)
+{ 
+    maxs = INT_MIN;
+    Util(root);
+    
+    return maxs;
+}
+
+main() {
+    int t;
+    cin>>(t);
+    while (t--) {
+        Node *root =readtree();
+     	cout << maxPathSum(root) << "\n";
+    }
+}
