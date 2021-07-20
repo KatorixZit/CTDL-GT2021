@@ -1,0 +1,116 @@
+Cho một cây có N node, gốc tại 1. Có Q truy vấn, mỗi truy vấn yêu cầu bạn tìm khoảng cách giữa hai node u và v.
+
+
+
+Input:
+
+Dòng đầu tiên là số lượng bộ test T( T≤ 20).
+
+Mỗi test bắt đầu bằng số nguyên N (1 ≤ N ≤ 1000). N-1 dòng tiếp theo, mỗi dòng gồm 2 số nguyên u, v cho biết node u nối với node v.
+
+Dòng tiếp theo là số lượng truy vấn Q (1 ≤ Q ≤ 1000). Q dòng tiếp theo, mỗi dòng gồm 2 số nguyên u và v.
+
+Output: 
+
+Với mỗi test, in ra Q dòng là đáp án với mỗi truy vấn.
+
+Test ví dụ:
+
+Input:
+
+Output
+
+1
+
+8
+
+1 2
+
+1 3
+
+2 4
+
+2 5
+
+3 6
+
+3 7
+
+6 8
+
+5
+
+4 5
+
+4 6
+
+3 4
+
+2 4
+
+8 5
+
+2
+
+4
+
+3
+
+1
+
+5
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<pair<int,int> >ke[1005];
+bool ok[1005];
+int d[1005];
+int a, b;
+
+void BFS(int u, int n, int v){
+	
+	memset(ok,false,sizeof(ok));
+	for (int i = 0; i<=n; i++){
+		d[i]=INT_MAX;
+	}
+	d[u] = 0;
+	queue<int>q;
+	q.push(u);
+	while (!q.empty()){
+		int top = q.front(); q.pop();
+		ok[top]=true;
+		for (int i = 0; i<ke[top].size(); i++){
+			int v=ke[top][i].first;
+			int h=ke[top][i].second;
+			if (d[v]>d[top]+h && !ok[v]){
+				d[v]=d[top]+h;
+				q.push(v);
+				ok[v]=true;
+			}
+		}
+	}
+	cout<<d[v]<<endl;
+}
+
+int main(){
+	int t; cin>>t;
+	while (t--){
+		for (int i = 0; i<1005; i++){
+			ke[i].clear();
+		}
+		cin>>a; b=a-1;
+		for (int i = 0; i<b; i++){
+			int u, v;
+			cin>>u>>v;
+			ke[u].push_back({v,1});
+			ke[v].push_back({u,1});
+		}
+		int q; cin>>q;
+		while (q--){
+			int x, y; cin>>x>>y;
+			BFS(x,a,y);
+		}
+	}
+}
